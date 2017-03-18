@@ -8,6 +8,7 @@ export default class Layout extends React.Component {
 	constructor() {
 		super();
 		this.state = {
+			deckbrewEndpoint: 'https://api.deckbrew.com/mtg/cards',
 			sizes: [60, 40],
 			selectedSize: 60,
 			colors: ['black', 'white', 'red', 'green', 'blue'],
@@ -103,7 +104,7 @@ export default class Layout extends React.Component {
 			if (index !== 'land') {
 				const color = data.color ? `&color=${data.color}` : '',
 					type = index ? `&type=${index}` : '';
-				url = `https://api.deckbrew.com/mtg/cards?format=standard${color}${type}`;
+				url = `${this.state.deckbrewEndpoint}?format=standard${color}${type}`;
 			} else {
 				const landMapping = {
 						'white': 'plains',
@@ -112,7 +113,7 @@ export default class Layout extends React.Component {
 						'blue': 'island',
 						'green': 'forest'
 					};
-				url = `https://api.deckbrew.com/mtg/cards?type=land&supertype=basic&name=${landMapping[data.color]}`;
+				url = `${this.state.deckbrewEndpoint}?type=land&supertype=basic&name=${landMapping[data.color]}`;
 			}
 
 			return this.makeRequest(url)
