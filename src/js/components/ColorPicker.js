@@ -3,10 +3,10 @@ import React from 'react';
 
 export default class ColorPicker extends React.Component {
 	constructor(props) {
-   		super(props);
-   		this.state = {
-   			selectedColors: []
-   		}
+		super(props);
+		this.state = {
+			selectedColors: []
+		}
 	}
 
 	handleChange(event) {
@@ -23,19 +23,17 @@ export default class ColorPicker extends React.Component {
 	}
 
 	render() {
-        return (
-        	<div class='row'>
-        		<div class='small-12 columns'>
-					<div class='color-checkboxes'>
-						{this.props.colors.map((color) => (
-							<div key={color}>
-								<input type='checkbox' name="deck-colors" id={color} value={color} onChange={this.handleChange.bind(this)}></input>
-								<label for={color}>{color}</label>
-							</div>
-						))}
-					</div>
+		return (
+			<div class='small-12 medium-6 columns'>
+				<div class='color-checkboxes'>
+					{this.props.colors.map((color) => (
+						<div key={color}>
+							<input type='checkbox' name="deck-colors" id={color} value={color} onChange={this.handleChange.bind(this)}></input>
+							<label for={color}>{color}</label>
+						</div>
+					))}
 				</div>
 			</div>
-        );
- 	}
+		);
+	}
  }

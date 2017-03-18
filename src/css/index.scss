@@ -1,8 +1,48 @@
-.color-checkboxes {
-	input[type="checkbox"] {
-		margin-right: 15px;
+.deck-properties {
+	.color-checkboxes {
+		input[type="checkbox"] {
+			margin-right: 15px;
+		}
+		label {
+			text-transform: capitalize;
+		}
 	}
-	label {
+	.build-button {
+		min-width: 260px;
+	}
+}
 
+.deck-list {
+	H3, H4 {
+		text-transform: capitalize;
+	}
+	.card-item-renderer {
+		.card-title-link {
+			position: relative;
+			.card-packshot {
+				position: absolute;
+				left: calc(100% + 20px);
+				top: 50%;
+				transform: translateY(-50%);
+				height: 311px;
+				width: 224px;
+				max-width: none;
+				z-index: 1;
+				background: black;
+				&.hidden {
+					display: none;
+				}
+			}
+			.arrow-left {
+				width: 0px;
+				height: 0px;
+				top: 145px;
+				left: -9px;
+				position: absolute;
+				border-top: 10px solid transparent;
+				border-bottom: 10px solid transparent;
+				border-right: 10px solid black;
+			}
+		}
 	}
 }

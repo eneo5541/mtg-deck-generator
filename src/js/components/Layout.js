@@ -48,7 +48,9 @@ export default class Layout extends React.Component {
 				}
 				return { 'color': color, 'size': cardCount };
 			});
-		cardDistribution.push({ 'color': 'artifact', 'size': totalCards });
+		if (totalCards > 0) {
+			cardDistribution.push({ 'color': 'artifact', 'size': totalCards });
+		}
 
        	var cardPromises = _.map(cardDistribution, this.getTypeDistribution.bind(this));
         Promise.all(cardPromises).then(function(loadedCards) {
@@ -121,7 +123,7 @@ export default class Layout extends React.Component {
 					while (totalCards > 0) {
 						var cardIndex = this.randomInt(cards.length),
 							cardData = cards[cardIndex],
-							cardDuplicates = this.randomInt(4) + 1;
+							cardDuplicates = index !== 'land' ? this.randomInt(4) + 1 : data.total;
 						if (cardDuplicates > totalCards) {
 							cardDuplicates = totalCards;
 						}
@@ -172,17 +174,17 @@ export default class Layout extends React.Component {
 				<div class='row'>
 					<div class='small-12 columns'>
 						<div class='deck-properties'>
-							<SizeSelector changeSelectedSize={this.changeSelectedSize.bind(this)} sizes={this.state.sizes}/>
 							<ColorPicker changeSelectedColors={this.changeSelectedColors.bind(this)} colors={this.state.colors}/>
-							<a class='button' onClick={this.buildDeck.bind(this)}>Build</a>
+							<SizeSelector changeSelectedSize={this.changeSelectedSize.bind(this)} sizes={this.state.sizes}/>
+							<div class='small-12 medium-6 columns'>
+								<a class='button build-button' onClick={this.buildDeck.bind(this)}>Build</a>
+							</div>
 						</div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='small-12 columns'>
-						<div class='deck-list'>
-							<Decklist decklist={this.state.decklist}/>
-						</div>
+						<Decklist decklist={this.state.decklist}/>
 					</div>
 				</div>
 			</div>
