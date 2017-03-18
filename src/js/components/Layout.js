@@ -74,7 +74,9 @@ export default class Layout extends React.Component {
 			color.cards = _.mapValues(types, function (type) {
 				return {
 					__proto__: cardType,
-					'percentage': type
+					'percentage': type,
+					'total': 0,
+					'cards': []
 				};
 			});
 			while (totalCards > 0) {
