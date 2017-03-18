@@ -50,8 +50,10 @@ export default class Layout extends React.Component {
 			});
 		cardDistribution.push({ 'color': 'artifact', 'size': totalCards });
 
-        _.each(cardDistribution, this.getTypeDistribution.bind(this));
-        return cardDistribution;
+       	var cardPromises = _.map(cardDistribution, this.getTypeDistribution.bind(this));
+        Promise.all(cardPromises).then(function(loadedCards) {
+			this.changeDecklist(cardDistribution);
+		}.bind(this));
 	}
 
 	getTypeDistribution (color) {
@@ -90,7 +92,8 @@ export default class Layout extends React.Component {
 			color.cards.sorcery.total = totalCards - (color.cards.land.total + color.cards.creature.total + color.cards.instant.total)
 		}
 
-        _.each(color.cards, this.getCardData.bind(this));
+        var cardPromises = _.map(color.cards, this.getCardData.bind(this));
+        return Promise.all(cardPromises);
 	}
 
 	getCardData (data, index) {
@@ -111,7 +114,7 @@ export default class Layout extends React.Component {
 				url = `https://api.deckbrew.com/mtg/cards?type=land&supertype=basic&name=${landMapping[data.color]}`;
 			}
 
-			this.makeRequest(url)
+			return this.makeRequest(url)
 				.then(function (response) {
 					var cards = JSON.parse(response);
 					var totalCards = data.total;
@@ -136,8 +139,7 @@ export default class Layout extends React.Component {
 	}
 
 	buildDeck () {
-		var newDecklist = this.getColorDistribution(this.state.selectedSize, this.state.selectedColors);
-		this.changeDecklist(newDecklist);
+		this.getColorDistribution(this.state.selectedSize, this.state.selectedColors);
 	}
 
 	makeRequest (url) {
