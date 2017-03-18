@@ -53,14 +53,14 @@ export default class Layout extends React.Component {
 		}
 
        	var cardPromises = _.map(cardDistribution, this.getTypeDistribution.bind(this));
-        Promise.all(cardPromises).then(function(loadedCards) {
+        Promise.all(cardPromises).then(function (loadedCards) {
 			this.changeDecklist(cardDistribution);
 		}.bind(this));
 	}
 
 	getTypeDistribution (color) {
-		const totalCards = color.size,
-			cardType = { 'color': color.color, 'total': 0, 'cards': [] };
+		var totalCards = color.size,
+			cardType = { 'color': color.color, 'percentage': 1, 'total': 0, 'cards': [] };
 		if (color.color === 'artifact') {
 			color.cards = {
 				'artifact': {
@@ -70,28 +70,25 @@ export default class Layout extends React.Component {
 				}
 			};
 		} else {
-			color.cards = {
-				'land': {
+			var types = { 'land': 0.4, 'sorcery': 0.3, 'instant': 0.15, 'creature': 0.15 };
+			color.cards = _.mapValues(types, function (type) {
+				return {
 					__proto__: cardType,
-					'total': Math.floor(color.size * 0.4) + this.offset(3),
-					'cards': []
-				},
-				'creature': {
-					__proto__: cardType,
-					'total': Math.floor(color.size * 0.3) + this.offset(3),
-					'cards': []
-				},
-				'instant': {
-					__proto__: cardType,
-					'total': Math.floor(color.size * 0.15) + this.offset(3),
-					'cards': []
-				},
-				'sorcery': {
-					__proto__: cardType,
-					'cards': []
-				}
-			};
-			color.cards.sorcery.total = totalCards - (color.cards.land.total + color.cards.creature.total + color.cards.instant.total)
+					'percentage': type
+				};
+			});
+			while (totalCards > 0) {
+				_.each(color.cards, function (card, index) {
+					var typeTotal = Math.floor(color.size * card.percentage) + this.offset(3);
+					if (typeTotal > totalCards) {
+						typeTotal = totalCards;
+					} else if (typeTotal < 0) {
+						typeTotal = 0;
+					}
+					card.total += typeTotal,
+					totalCards -= typeTotal;
+				}.bind(this));
+			}
 		}
 
         var cardPromises = _.map(color.cards, this.getCardData.bind(this));

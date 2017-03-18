@@ -18,14 +18,18 @@ export default class Decklist extends React.Component {
 		const CardTypeItem = props => {
 			return (
 				<div class='row color-cards'>
-					{Object.keys(props.types).map(function(typeKey) {
+					{Object.keys(props.types).map(function (typeKey) {
 						var type = props.types[typeKey];
-						return (
-							<div class='small-12 medium-4 columns type-container' key={typeKey}>
-								<h4>{typeKey} ({type.total})</h4>
-								<CardIndividualItem cards={type} />
-							</div>
-						);
+						if (type.total === 0) {
+							return null;
+						} else {
+							return (
+								<div class='small-12 medium-4 columns type-container' key={typeKey}>
+									<h4>{typeKey} ({type.total})</h4>
+									<CardIndividualItem cards={type} />
+								</div>
+							);
+						}
 					 })}
 				</div>
 			)

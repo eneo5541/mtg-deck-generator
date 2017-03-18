@@ -10,7 +10,7 @@ export default class CardItemRenderer extends React.Component {
 	}
 
 	handleMouseOver(event) {
-		this.state.timer = setTimeout(function() {
+		this.state.timer = setTimeout(function () {
 			this.setState({displayPackshot: true});
 		}.bind(this), 200);
 	}
